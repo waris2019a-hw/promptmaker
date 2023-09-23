@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt maker</title>
+    <style>
+        /* CSS styles go here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        select, button, textarea {
+            margin: 10px;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        textarea {
+            width: 90%;
+            height: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PROMPTMAKER</h1>
+    Act as
+    <select id="act">
+
+  <option value="CEO">CEO</option>
+  <option value="Marketer">Marketer</option>
+  <option value="Inventor">Inventor</option>
+  <option value="Therapist">Therapist</option>
+  <option value="Journalist">Journalist</option>
+  <option value="Advertiser">Advertiser</option>
+  <option value="Copywriter">Copywriter</option>
+  <option value="Ghostwriter">Ghostwriter</option>
+  <option value="Accountant">Accountant</option>
+  <option value="Entrepreneur">Entrepreneur</option>
+  <option value="Mindset Coach">Mindset Coach</option>
+  <option value="Project Manager">Project Manager</option>
+  <option value="Prompt Engineer">Prompt Engineer</option>
+  <option value="Website Designer">Website Designer</option>
+  <option value="Best Selling Author">Best Selling Author</option>
+  <option value="Programmer">Programmer</option>
+</select>
+<br>
+Task
+ <select id="task">
+    <option value="write">Write</option>
+<option value="Essay">Essay</option>
+  <option value="Recipe">Recipe</option>
+  <option value="Article">Article</option>
+  <option value="Ad Copy">Ad Copy</option>
+  <option value="Headline">Headline</option>
+  <option value="Analysis">Analysis</option>
+  <option value="Blog Post">Blog Post</option>
+  <option value="Summary">Summary</option>
+  <option value="Sales Copy">Sales Copy</option>
+  <option value="Video Script">Video Script</option>
+  <option value="SEO Keywords">SEO Keywords</option>
+  <option value="Book Outline">Book Outline</option>
+  <option value="Email Sequence">Email Sequence</option>
+  <option value="Social Media Post">Social Media Post</option>
+  <option value="Product Description">Product Description</option>
+  <option value="Cover letter">Cover letter</option>
+  <option value="code">Code</option>
+
+ </select>
+ <br>
+  <input type="text" id="detail" placeholder="Enter details"><br>
+  <br>
+ Show as
+ <select id="show">
+    <option value="Plain Text file">Plain Text file</option>
+<option value="List">List</option>
+  <option value="PDF">PDF</option>
+  <option value="XML">XML</option>
+  <option value="HTML">HTML</option>
+  <option value="Code">Code</option>
+  <option value="Graphs">Graphs</option>
+  <option value="A Table">A Table</option>
+  <option value="Rich Text">Rich Text</option>
+  <option value="Summary">Summary</option>
+  <option value="Markdown">Markdown</option>
+  <option value="Word Cloud">Word Cloud</option>
+  <option value="Spreadsheet">Spreadsheet</option>
+  <option value="CSV file">CSV file</option>
+  <option value="JSON">JSON</option>
+  <option value="Gantt Chart">Gantt Chart</option>
+  <option value="Presentation Slides">Presentation Slides</option>
+
+ </select>
+
+ <select id="lang">
+    <option value="ภาษาไทย">TH</option>
+<option value="in English">EN</option>
+ </select>
+
+ <button onclick="combineSelects()">Prompt Maker</button><br>
+ <textarea id="output"></textarea>
+<!-- <button onclick="copyToClipboard()">Copy to Clipboard</button>-->
+ <button onclick="myCopy()">Copy to Clipboard</button>
+ <a href="https://chat.openai.com/" target="_blank">chatGPT</a>
+ <script>
+        function combineSelects() {
+            var actSelect = document.getElementById("act");
+            var taskSelect = document.getElementById("task");
+            var showSelect = document.getElementById("show");
+            var detailInput = document.getElementById("detail");
+            var outputTextarea = document.getElementById("output");
+
+            var combinedText = "Act as " + actSelect.value + " " +
+                "perform " + taskSelect.value + " " + 
+                "in " + detailInput.value + " " + 
+                "Show as " + showSelect.value + " " + 
+                "" + lang.value;
+
+            outputTextarea.value = combinedText;
+        }
+   /*    function copyToClipboard() {
+            var textarea = document.getElementById("output");
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(textarea.value);
+            document.execCommand("copy");
+            alert("Text copied to clipboard!");
+        }
+        */
+
+function copyToClipboard() {
+  var textarea = document.getElementById("output");
+  textarea.select();
+  textarea.setSelectionRange(0, 99999); // For mobile devices
+
+  if (document.execCommand && typeof document.execCommand === "function") {
+    document.execCommand("copy");
+    alert("Text copied to clipboard!");
+  } else {
+    fallbackCopyToClipboard(textarea.value);
+  }
+  
+}
+
+function fallbackCopyToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand("copy");
+    var msg = successful ? "Text copied to clipboard!" : "Copying text to clipboard failed.";
+    console.log('Fallback: Copying text command was ' + msg);
+    alert(msg);
+  } catch (err) {
+    console.error("Unable to copy to clipboard.", err);
+    console.error('Fallback: Oops, unable to copy', err);
+  }
+
+  document.body.removeChild(textArea);
+}
+
+function myCopy() {
+  // Get the text field
+  var copyText = document.getElementById("output");
+
+  // Select the text field
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+  
+  // Alert the copied text
+  alert("Copied the text: " + copyText.value);
+}
+    </script>
+</body>
+</html>
